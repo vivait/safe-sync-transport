@@ -35,7 +35,7 @@ final class GenericContainer implements ContainerInterface
         return $this->container->initialized($id);
     }
 
-    public function getParameter(string $name): mixed
+    public function getParameter(string $name): array|bool|string|int|float|\UnitEnum|null
     {
         return $this->container->getParameter($name);
     }
