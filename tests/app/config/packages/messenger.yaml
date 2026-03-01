@@ -8,6 +8,7 @@ framework:
                     max_retries: 3
                     delay: 1000
                     multiplier: 2
+                    jitter: 0
             failed:
                 dsn: 'doctrine://default'
 
