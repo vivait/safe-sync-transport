@@ -28,22 +28,25 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        php:
-          - 8.3
-          - 8.4
-        symfony:
-          - 6.4.*
-          - 7.4.*
+        operating-system: [ ubuntu-latest ]
+        php: ['8.3', '8.4']
+        symfony: ['6.4.*', '7.4.*']
+        depLevel: ['lowest', 'highest']
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@master
 
-      - name: Setup PHP
+      - name: Setup PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+          tools: flex
 
-      - name: Install dependencies
-        run: composer require symfony/messenger:${{ matrix.symfony }}  --prefer-dist --no-progress
+      - name: Download dependencies
+        env:
+          SYMFONY_REQUIRE: ${{ matrix.symfony }}
+        uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: ${{ matrix.depLevel }}
 
       - name: Run test suite
         run: composer test:feature
