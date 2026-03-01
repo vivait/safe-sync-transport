@@ -6,6 +6,7 @@ namespace Pest\Custom\Symfony;
 
 use LogicException;
 use Pest\Exceptions\ShouldNotHappen;
+use PHPUnit\Runner\Version;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -15,14 +16,25 @@ function app(bool $reInstanciate = false): KernelInterface
     static $kernel;
 
     if (null === $kernel || $reInstanciate) {
-        $testCase = new class ('kernel') extends KernelTestCase {
-            public function getKernel(): KernelInterface
-            {
-                self::bootKernel();
+        if (version_compare(Version::id(), '11.0.0', '>=')) {
+            $testCase = new class ('kernel') extends KernelTestCase {
+                public function getKernel(): KernelInterface
+                {
+                    self::bootKernel();
 
-                return self::$kernel;
-            }
-        };
+                    return self::$kernel;
+                }
+            };
+        } else {
+            $testCase = new class () extends KernelTestCase {
+                public function getKernel(): KernelInterface
+                {
+                    self::bootKernel();
+
+                    return self::$kernel;
+                }
+            };
+        }
         $kernel = $testCase->getKernel();
     }
 
