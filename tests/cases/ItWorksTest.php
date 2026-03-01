@@ -101,7 +101,7 @@ it('retries several times, with a growing delay', function () {
         )
         ->and($handler->lastMessage)->toBeInstanceOf(DummyMessage::class)
         ->and($handler->lastMessage?->payload)->toBe('covfefe')
-        ->and($end - $start)->toBeGreaterThan(7);
+        ->and($end - $start)->toBeGreaterThan(6); // Should be 7, but in SF7.1 jitter has been added
 });
 
 it('pushes the message away to a failure transport when max retries have been reached', function () {

@@ -15,7 +15,7 @@ function app(bool $reInstanciate = false): KernelInterface
     static $kernel;
 
     if (null === $kernel || $reInstanciate) {
-        $testCase = new class () extends KernelTestCase {
+        $testCase = new class ('kernel') extends KernelTestCase {
             public function getKernel(): KernelInterface
             {
                 self::bootKernel();
